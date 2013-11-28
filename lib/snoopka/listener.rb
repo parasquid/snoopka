@@ -38,7 +38,7 @@ module Snoopka
     def consume
       @consumers.each do |consumer|
         message = consumer.consume
-        notify_observers(consumer.topic, message)
+        notify_observers(consumer.topic, message) if message.length > 0
       end
     end
 
