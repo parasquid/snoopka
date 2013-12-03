@@ -18,7 +18,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Sample code:
+
+    require 'snoopka'
+    require 'logger'
+
+    # pass the custom behavior as a block
+    namespace :kafka do
+      desc 'Starts the kafka listener'
+      task :listen, [:daemonized] => :environment  do |t, args|
+        Process.daemon(true, true) if args.daemonized
+        puts 'Starting the Kafka listener'
+
+        listener = Snoopka::Listener.new host: "localhost", port: 9092
+
+        handler = Handler.new
+        listener.add_observer 'test', &handler
+
+        loop do
+          listener.consume
+        end
+      end
+    end
 
 ## Contributing
 
