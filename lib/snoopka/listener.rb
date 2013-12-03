@@ -28,17 +28,17 @@ module Snoopka
     end
 
     # loop through all observers of this topic and call the associated blocks
-    def notify_observers(topic, message)
+    def notify_observers(topic, messages)
       @observers[topic].each do |observer|
-        observer.call message
+        observer.call messages
       end
     end
 
     # loop through all consumers to read from kafka
     def consume
       @consumers.each do |consumer|
-        message = consumer.consume
-        notify_observers(consumer.topic, message) if message.length > 0
+        messages = consumer.consume
+        notify_observers(consumer.topic, messages) if messages.length > 0
       end
     end
 
