@@ -23,6 +23,23 @@ Sample code:
     require 'snoopka'
     require 'logger'
 
+    class Handler
+      def initialize
+        @logger = Logger.new(STDOUT)
+      end
+    
+      def handle(messages)
+        messages.each do |message|
+          payload = eval(message.payload.to_s.gsub('null', '""').gsub(':', '=>'))
+          @logger.info payload
+        end
+      end
+    
+      def to_proc
+        ->(messages) { handle(messages) }
+      end
+    end
+    
     # pass the custom behavior as a block
     namespace :kafka do
       desc 'Starts the kafka listener'
